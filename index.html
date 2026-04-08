@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>De Constructivistische AI-Enting</title>
+    <title>Onderwijsverrijking & Leertheorie</title>
     <style>
         :root {
             --primary: #9b59b6; /* Constructivisme */
-            --secondary: #3498db; /* AI / Cognitivisme */
+            --secondary: #3498db; /* Cognitivisme */
             --accent: #f1c40f; /* Behaviorisme */
             --dark: #2c3e50;
             --light: #ecf0f1;
@@ -17,46 +17,46 @@
 
         body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; background: #f8f9fa; color: var(--dark); overflow-x: hidden; }
 
-        /* Abstracte Beweging (Geen Picto's) */
-        .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; opacity: 0.2; }
-        .blob { position: absolute; background: var(--secondary); filter: blur(60px); border-radius: 50%; animation: float 20s infinite alternate; }
-        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(100px, 100px) scale(1.3); } }
+        /* Abstracte Achtergrond */
+        .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; opacity: 0.15; }
+        .blob { position: absolute; background: var(--secondary); filter: blur(80px); border-radius: 50%; animation: float 25s infinite alternate; }
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(120px, 120px) scale(1.4); } }
 
         /* Navigatie */
-        #admin-bar { background: var(--dark); padding: 10px; display: flex; justify-content: center; gap: 8px; position: sticky; top: 0; z-index: 1000; }
-        button { padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-nav { background: var(--light); color: var(--dark); font-size: 0.8em; }
+        #admin-bar { background: var(--dark); padding: 12px; display: flex; justify-content: center; gap: 10px; position: sticky; top: 0; z-index: 1000; }
+        button { padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-nav { background: var(--light); color: var(--dark); font-size: 0.85em; }
         .btn-nav:hover { background: var(--accent); }
-        .btn-action { background: var(--primary); color: white; margin-top: 10px; }
+        .btn-action { background: var(--primary); color: white; margin-top: 15px; }
 
         /* Schermen & Kaarten */
         .screen { display: none; max-width: 1150px; margin: 30px auto; padding: 20px; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .theory-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 20px; border-left: 8px solid var(--primary); }
+        .theory-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 25px; border-left: 10px solid var(--primary); }
         
         /* Borden & Interactie */
-        .board-container { position: relative; width: 1000px; height: 800px; border: 3px solid var(--dark); background: white; margin: 20px auto; overflow: hidden; }
-        .draggable { position: absolute; width: 220px; padding: 12px; background: #fffde7; border: 1px solid #fff59d; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: move; z-index: 10; }
-        .draggable textarea { width: 100%; height: 60px; margin-top: 8px; border: 1px solid #ddd; border-radius: 4px; resize: none; font-size: 11px; font-family: inherit; }
+        .board-container { position: relative; width: 1000px; height: 750px; border: 3px solid var(--dark); background: white; margin: 20px auto; overflow: hidden; }
+        .draggable { position: absolute; width: 230px; padding: 15px; background: #fffde7; border: 1px solid #fff59d; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); cursor: move; z-index: 10; }
+        .draggable textarea { width: 100%; height: 65px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; resize: none; font-size: 12px; font-family: inherit; padding: 5px; box-sizing: border-box; }
 
         /* Scherm 5 Layout */
-        #analysis-layout { display: flex; gap: 20px; align-items: flex-start; }
-        #theory-source { width: 320px; background: #eef2f5; padding: 15px; border-radius: 10px; height: 800px; overflow-y: auto; }
-        .source-item { background: white; padding: 10px; margin-bottom: 8px; border-radius: 6px; cursor: pointer; border: 1px solid #ccc; font-size: 0.85em; transition: 0.2s; }
-        .source-item:hover { background: var(--accent); transform: translateX(5px); }
+        #analysis-layout { display: flex; gap: 25px; align-items: flex-start; }
+        #theory-source { width: 320px; background: #eef2f5; padding: 20px; border-radius: 12px; height: 750px; overflow-y: auto; border: 1px solid #ddd; }
+        .source-item { background: white; padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; border: 1px solid #ccc; font-size: 0.9em; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .source-item:hover { background: var(--accent); transform: translateX(8px); }
 
-        /* Visuals */
-        .black-box { width: 80px; height: 80px; background: black; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.7em; margin: 0 auto; text-align: center; }
-        .ent-visual { width: 60px; height: 80px; border: 1px solid #ddd; position: relative; margin: 0 auto; background: #fff; }
-        .stem { position: absolute; bottom: 0; left: 45%; width: 10%; height: 60%; background: var(--primary); }
-        .ent { position: absolute; top: 20%; left: 55%; width: 30%; height: 30%; background: var(--secondary); border-radius: 0 50% 0 50%; transform: rotate(-20deg); }
+        /* Abstracte Visuals */
+        .black-box { width: 90px; height: 90px; background: black; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75em; margin: 0 auto; text-align: center; border: 2px solid #444; }
+        .ent-visual { width: 70px; height: 90px; border: 2px solid #eee; position: relative; margin: 0 auto; background: #fff; border-radius: 4px; }
+        .stem { position: absolute; bottom: 0; left: 42%; width: 16%; height: 65%; background: var(--primary); }
+        .ent { position: absolute; top: 15%; left: 50%; width: 35%; height: 35%; background: var(--secondary); border-radius: 0 60% 0 60%; transform: rotate(-15deg); }
     </style>
 </head>
 <body>
 
 <div class="bg-layer">
     <div class="blob" style="width: 500px; height: 500px; top: -100px; left: -100px;"></div>
-    <div class="blob" style="width: 400px; height: 400px; bottom: -50px; right: -50px; background: var(--primary);"></div>
+    <div class="blob" style="width: 450px; height: 450px; bottom: -50px; right: -50px; background: var(--primary);"></div>
 </div>
 
 <div id="admin-bar">
@@ -69,59 +69,53 @@
 
 <div id="screen-1" class="screen">
     <div class="theory-card" style="border-left-color: var(--accent); text-align: center;">
-        <h1>Workshop: AI Enten op Onderwijs</h1>
-        <p>Welkom onderwijzers. Voer je koppelnaam in om de gezamenlijke bouwplaats te betreden:</p>
-        <input type="text" id="nameInput" placeholder="Koppelnaam..." style="padding: 12px; width: 280px; border-radius: 8px; border: 1px solid #ccc;">
+        <h1 style="color: var(--dark); font-size: 2.3em; margin-bottom: 15px;">Bouw mee aan Onderwijsverrijking!</h1>
+        <p style="font-size: 1.15em; line-height: 1.7; color: #444; max-width: 850px; margin: 0 auto 25px auto;">
+            Vandaag ben jij de architect. We duiken in de wereld van de leertheorieën — niet vanuit de boeken, maar direct op de werkvloer. 
+            <br><br>
+            <strong>Het doel?</strong> Ontdekken hoe jij met de juiste tools en inzichten jouw lessen kunt verrijken. We gaan experimenteren met structuur, het brein prikkelen en samen nieuwe kennis construeren.
+        </p>
+        <div style="background: #fff9c4; padding: 18px; border-radius: 12px; display: inline-block; margin-bottom: 25px; border: 2px dashed var(--accent);">
+            <strong>Klaar om te starten?</strong> Voer jullie koppelnaam in:
+        </div>
         <br>
-        <button class="btn-action" onclick="login()">START CO-CONSTRUCTIE</button>
-    </div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-        <div class="theory-card" style="border-left-color: var(--secondary);">
-            <h2>Onze Missie</h2>
-            <p>Vandaag ervaren we hoe <strong>AI als instrument</strong> wordt geënt op klassieke leertheorieën om actieve samenwerking en betekenisgeving te versterken.</p>
-        </div>
-        <div class="theory-card">
-            <h2>Leerdoelen</h2>
-            <ul>
-                <li>Stromingen herkennen en duiden binnen digitale tools.</li>
-                <li>AI inzetten als 'scaffold' in de Zone van Naaste Ontwikkeling.</li>
-                <li>Theorieën <strong>enten</strong> op de eigen onderwijspraktijk.</li>
-            </ul>
-        </div>
+        <input type="text" id="nameInput" placeholder="Bijv. De Pioniers / Team Groen" style="padding: 15px; width: 340px; border-radius: 8px; border: 2px solid var(--accent); font-size: 1em; outline: none;">
+        <br>
+        <button class="btn-action" style="padding: 18px 45px; font-size: 1.1em; background: var(--dark); color: white;" onclick="login()">BETREE DE BOUWPLAATS</button>
     </div>
 </div>
 
 <div id="screen-2" class="screen">
     <div class="theory-card" style="border-left-color: var(--accent);">
         <h2>Behaviorisme: De Zwarte Doos</h2>
-        <div style="display: flex; gap: 20px; align-items: center;">
+        <div style="display: flex; gap: 30px; align-items: center;">
             <div style="flex: 1;">
-                <p>Het geheugen is een zwarte doos; we meten alleen wat eruit komt. Leergedrag is te manipuleren met beloningen en directe feedback.</p>
-                <p><span class="success">Plus:</span> Directe feedback, succeservaring door kleine stappen, objectief meetbaar.</p>
-                <p><span class="danger">Min:</span> Focus op trucjes ipv begrip, motivatie stopt bij gebrek aan beloning, geen creativiteit.</p>
+                <p>Het geheugen wordt beschouwd als een zwarte doos; we sturen op meetbare output. Leergedrag wordt versterkt door beloning, herhaling en directe feedback.</p>
+                <p><strong style="color: var(--success);">Pluspunten:</strong> Direct resultaat, succeservaring door kleine stappen, heldere en objectief meetbare structuur.</p>
+                <p><strong style="color: var(--danger);">Minpunten:</strong> Weinig aandacht voor het diepere denkproces, motivatie kan verdwijnen zonder externe prikkels, beperkte ruimte voor creativiteit.</p>
             </div>
-            <div class="black-box">INPUT ➔ [ ? ] ➔ OUTPUT</div>
+            <div class="black-box">STIMULUS ➔ [ ? ] ➔ RESPONS</div>
         </div>
     </div>
-    <div style="text-align:center;">
-        <input type="text" id="gWord" placeholder="Plaats een woord op het grote bord...">
-        <button class="btn-action" style="background:var(--accent); color:black;" onclick="sendGWord()">Plaats</button>
+    <div style="text-align:center; margin-bottom: 15px;">
+        <input type="text" id="gWord" placeholder="Typ een term..." style="padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
+        <button class="btn-action" style="background:var(--accent); color:black; margin-top:0;" onclick="sendGWord()">Plaats op Bord</button>
     </div>
-    <div class="board-container"><canvas id="gCanvas" width="1000" height="800"></canvas></div>
+    <div class="board-container"><canvas id="gCanvas" width="1000" height="750"></canvas></div>
 </div>
 
 <div id="screen-3" class="screen">
     <div class="theory-card" style="border-left-color: var(--secondary);">
         <h2>Cognitivisme: De Computer</h2>
-        <p>Leren is het verwerken van informatie en het opslaan in mentale schema's. We kijken <em>in</em> de doos.</p>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div><span class="success">Plus:</span> Diepgaand begrip, koppeling aan voorkennis, bevordert probleemoplossend vermogen.</div>
-            <div><span class="danger">Min:</span> Gevaar voor cognitieve overbelasting, tijdsintensief, proces is lastig meetbaar.</div>
+        <p>Leren draait om informatieverwerking en het opbouwen van mentale schema's. De focus ligt op hoe kennis wordt opgeslagen, georganiseerd en teruggevonden in het brein.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+            <div><strong style="color: var(--success);">Pluspunten:</strong> Bevordert diepgaand begrip door koppeling aan voorkennis, versterkt het probleemoplossend vermogen en zelfsturing.</div>
+            <div><strong style="color: var(--danger);">Minpunten:</strong> Risico op cognitieve overbelasting bij te veel nieuwe info, het leerproces is intern en daardoor lastiger te monitoren of te meten.</div>
         </div>
     </div>
-    <div style="margin-bottom:10px;">
-        <input type="text" id="pWord" placeholder="Nieuw cognitief label...">
-        <button class="btn-action" style="background:var(--secondary);" onclick="addPDrag()">Voeg Label Toe</button>
+    <div style="margin-bottom:15px; text-align: center;">
+        <input type="text" id="pWord" placeholder="Nieuw concept..." style="padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
+        <button class="btn-action" style="background:var(--secondary); margin-top:0;" onclick="addPDrag()">Voeg Label Toe</button>
     </div>
     <div id="pBoard" class="board-container" style="background: #f0f4f8;"></div>
 </div>
@@ -129,30 +123,30 @@
 <div id="screen-4" class="screen">
     <div class="theory-card">
         <h2>Constructivisme: De Bouwplaats</h2>
-        <p>Leren is een sociaal proces van betekenisgeving. Kennis groeit door interactie. AI is de partner die helpt bij de co-constructie.</p>
-        <div style="display: flex; gap: 30px;">
+        <p>Leren is een actief, sociaal proces van betekenisgeving. Deelnemers bouwen hun eigen kennis op door interactie met de omgeving, materialen en met elkaar.</p>
+        <div style="display: flex; gap: 40px;">
             <div style="flex: 2;">
-                <p><span class="success">Plus:</span> Eigenaarschap bij de leerling, contextrijk leren, AI als socratische sparringpartner.</p>
-                <p><span class="danger">Min:</span> Inefficiënt proces, vraagt zeer hoge expertise en coaching van de onderwijzer.</p>
-                <div style="background: #fdfaff; padding: 15px; border-radius: 10px; border: 1px solid var(--primary);">
-                    <strong>De AI-Enting:</strong> AI biedt gepersonaliseerde <em>scaffolding</em> om de Zone van Naaste Ontwikkeling te bereiken zonder de docent te overbelasten.
+                <p><strong style="color: var(--success);">Pluspunten:</strong> Hoog eigenaarschap bij de leerling, contextrijk en betekenisvol leren, bevordert sociaal leren en kritisch denken.</p>
+                <p><strong style="color: var(--danger);">Minpunten:</strong> Het proces is tijdsintensief (zelf het wiel uitvinden) en vraagt een zeer sterke, coachende rol van de onderwijzer.</p>
+                <div style="background: #fdfaff; padding: 20px; border-radius: 12px; border: 2px solid var(--primary);">
+                    <strong>Verrijking:</strong> Door slimme hulpmiddelen en instrumenten in te zetten, kan de onderwijzer <em>scaffolding</em> bieden die precies aansluit bij de Zone van Naaste Ontwikkeling.
                 </div>
             </div>
             <div style="flex: 1; text-align: center;">
                 <div class="ent-visual"><div class="stem"></div><div class="ent"></div></div>
-                <p style="font-size: 0.8em; color: #777; margin-top:10px;">AI geënt op de praktijk</p>
+                <p style="font-size: 0.85em; color: #666; margin-top:12px; font-weight: bold;">Theorie geënt op praktijk</p>
             </div>
         </div>
     </div>
     <div style="text-align:center;">
-        <button class="btn-action" style="padding: 15px 40px;" onclick="setS(5)">GA NAAR DE ANALYSE</button>
+        <button class="btn-action" style="padding: 15px 45px; font-size: 1.1em;" onclick="setS(5)">GA NAAR DE ANALYSE</button>
     </div>
 </div>
 
 <div id="screen-5" class="screen">
     <div class="theory-card" style="border-left-color: var(--success);">
         <h2>De Enting: Mijn Onderwijspraktijk</h2>
-        <p>Sleep de kenmerken uit de theorieën naar het vak <strong>'Mijn Onderwijs'</strong> en onderbouw je keuze met <strong>'Omdat...'</strong>.</p>
+        <p>Sleep de kenmerken uit de theorieën die jouw onderwijs verrijken naar het vak <strong>'Mijn Praktijk'</strong> en onderbouw je keuze met <strong>'Omdat...'</strong>.</p>
     </div>
 
     <div id="analysis-layout">
@@ -162,7 +156,7 @@
         </div>
 
         <div id="analysis-board" class="board-container" style="flex-grow: 1; border: 4px dashed var(--primary);">
-            <div style="position: absolute; top: 10px; right: 20px; font-weight: bold; color: var(--primary); font-size: 1.5em; opacity: 0.2;">MIJN ONDERWIJS</div>
+            <div style="position: absolute; top: 10px; right: 20px; font-weight: bold; color: var(--primary); font-size: 1.5em; opacity: 0.2;">MIJN PRAKTIJK</div>
         </div>
     </div>
 </div>
@@ -186,9 +180,10 @@
 
     const theoryItems = [
         { t: "Directe Feedback (B)" }, { t: "Beloningssystemen (B)" }, { t: "Meetbare Output (B)" },
-        { t: "Extrinsieke Motivatie (B)" }, { t: "Voorkennis Activeren (C)" }, { t: "Informatieverwerking (C)" },
-        { t: "Mentale Schema's (C)" }, { t: "Cognitieve Overbelasting (C)" }, { t: "Sociaal Leren (CO)" },
-        { t: "Eigenaarschap (CO)" }, { t: "AI als Co-constructor (CO)" }, { t: "Scaffolding (CO)" }
+        { t: "Kleine stapjes (B)" }, { t: "Voorkennis Activeren (C)" }, { t: "Informatieverwerking (C)" },
+        { t: "Mentale Schema's (C)" }, { t: "Zelfsturing (C)" }, { t: "Sociaal Leren (CO)" },
+        { t: "Eigenaarschap (CO)" }, { t: "Betekenisgeving (CO)" }, { t: "Scaffolding (CO)" },
+        { t: "Extrinsieke Motivatie (Min)" }, { t: "Cognitieve Overbelasting (Min)" }, { t: "Tijdsintensief (Min)" }
     ];
 
     window.setS = (n) => set(ref(db, 'workshop/config/screen'), n);
@@ -203,7 +198,6 @@
         if(v) { myId = v.replace(/\s/g,'_').toLowerCase(); localStorage.setItem('pairId', myId); setS(2); }
     };
 
-    // Scherm 2: Global Canvas
     const canvas = document.getElementById('gCanvas');
     const ctx = canvas.getContext('2d');
     let draw = false;
@@ -218,14 +212,12 @@
         const d = s.val(); if(d) Object.values(d).forEach(p => { ctx.fillStyle="#000"; ctx.fillRect(p.x, p.y, 3, 3); });
     });
 
-    // Scherm 3: Pair Draggables
     window.addPDrag = () => {
         const t = document.getElementById('pWord').value;
         if(t) { push(ref(db, `workshop/pairs/${myId}/s3`), { t, x: 100, y: 100, ex: "" }); document.getElementById('pWord').value=""; }
     };
     onValue(ref(db, `workshop/pairs/${myId}/s3`), (s) => renderBoard(s.val(), 'pBoard', `workshop/pairs/${myId}/s3`));
 
-    // Scherm 5: Analyse Board
     function fillSource() {
         const container = document.getElementById('source-items');
         container.innerHTML = "";
@@ -246,7 +238,7 @@
             const div = document.createElement('div');
             div.className = "draggable";
             div.style.left = el.x+"px"; div.style.top = el.y+"px";
-            div.innerHTML = `<strong>${el.t}</strong>${hasOmdat ? `<textarea placeholder="Omdat...">${el.omdat || ""}</textarea>` : `<textarea placeholder="Extra info...">${el.ex || ""}</textarea>`}`;
+            div.innerHTML = `<strong>${el.t}</strong>${hasOmdat ? `<textarea placeholder="Omdat...">${el.omdat || ""}</textarea>` : `<textarea placeholder="Toelichting...">${el.ex || ""}</textarea>`}`;
             
             const txt = div.querySelector('textarea');
             txt.onchange = (e) => {
