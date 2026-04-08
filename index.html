@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Workshop</title>
+    <style>
+        :root { --primary: #007bff; --bg: #f4f4f9; }
+        body { font-family: sans-serif; margin: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; }
+        
+        /* Navigatie balk voor leider */
+        #admin-controls { background: #333; color: white; width: 100%; padding: 10px; text-align: center; position: sticky; top: 0; z-index: 100; }
+        button { padding: 8px 15px; cursor: pointer; border-radius: 5px; border: none; background: var(--primary); color: white; margin: 0 5px; }
+        button.secondary { background: #666; }
+
+        .screen { display: none; width: 1050px; padding: 20px; background: white; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-radius: 8px; }
+        
+        /* Digiborden */
+        .board-container { position: relative; width: 1000px; height: 800px; border: 2px solid #333; background: #fff; overflow: hidden; margin: 10px 0; }
+        canvas { position: absolute; top: 0; left: 0; cursor: crosshair; }
+        .words-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+        /* Draggables */
+        .draggable { 
+            position: absolute; width: 180px; padding: 10px; background: #fff176; border: 1px solid #e1d24a; 
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.1); cursor: move; pointer-events: auto; z-index: 10;
+        }
+        .draggable input, .draggable textarea { width: 100%; border: 1px solid rgba(0,0,0,0.1); margin-top: 5px; box-sizing: border-box; }
+        
+        .user-info { font-weight: bold; color: var(--primary); margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div id="admin-controls">
+    <strong>Workshopleider:</strong>
+    <button onclick="changeScreen(1)">Start</button>
+    <button onclick="changeScreen(2)">Groot Bord</button>
+    <button onclick="changeScreen(3)">Koppeltjes</button>
+</div>
+
+<div id="screen-1" class="screen">
+    <h1>Welkom bij de Workshop</h1>
+    <p>Wacht tot de leider de sessie start. Zorg dat je verbonden bent met je partner.</p>
+</div>
+
+<div id="screen-2" class="screen">
+    <h2>Gezamenlijk Digibord (1000x800)</h2>
+    <div style="margin-bottom: 10px;">
+        <input type="text" id="globalWordInput" placeholder="Typ een woord...">
+        <button onclick="postGlobalWord()">Plaats Woord</button>
+        <button class="secondary" onclick="clearGlobalCanvas()">Canvas Wissen</button>
+    </div>
+    <div class="board-container">
+        <canvas id="globalCanvas" width="1000" height="800"></canvas>
+        <div id="globalWordsLayer" class="words-layer"></div>
+    </div>
+</div>
+
+<div id="screen-3" class="screen">
+    <div class="user-info" id="pair-display">Laden van koppelgegevens...</div>
+    <div style="margin-bottom: 10px;">
+        <input type="text" id="dragInput" placeholder="Nieuw label...">
+        <button onclick="addNewDraggable()">Voeg Label Toe</button>
+        <button style="background: #28a745;" onclick="submitToLeader()">VERZENDEN NAAR LEIDER</button>
+    </div>
+    <div id="pair-board" class="board-container" style="background: #fafafa;">
+        </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getDatabase, ref, onValue, set, push, update, remove } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB_dmkDPTPm7gKVscacSVPNGfCibN2cu7U",
+        authDomain: "aispecialist-e7cff.firebaseapp.com",
+        projectId: "aispecialist-e7cff",
+        databaseURL: "https://aispecialist-e7cff-default-rtdb.europe-west1.firebasedatabase.app/",
+        appId: "1:65679462920:web:1bf5fb62f3feb9966777bd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // --- LOGICA VOOR KOPPEL-IDENTIFICATIE ---
+    // Tip: Open de url met ?id=koppel1 of ?id=koppel2
+    const urlParams = new URLSearchParams(window.location.search);
+    const myPairId = urlParams.get('id') || "bezoeker_" + Math.floor(Math.random() * 1000);
+    document.getElementById('pair-display').innerText = `Jij bent ingelogd als: ${myPairId}`;
+
+    // --- 1. SCHERM NAVIGATIE ---
+    window.changeScreen = (num) => set(ref(db, 'workshop/config/currentScreen'), num);
+    
+    onValue(ref(db, 'workshop/config/currentScreen'), (snap) => {
+        const s = snap.val() || 1;
+        document.querySelectorAll('.screen').forEach((el, i) => {
+            el.style.display = (i + 1 === s) ? 'block' : 'none';
+        });
+    });
+
+    // --- 2. SCHERM 2: GLOBAAL BORD (Tekenen & Woorden) ---
+    const gCanvas = document.getElementById('globalCanvas');
+    const gCtx = gCanvas.getContext('2d');
+    let isDrawing = false;
+
+    gCanvas.onmousedown = () => isDrawing = true;
+    gCanvas.onmouseup = () => isDrawing = false;
+    gCanvas.onmousemove = (e) => {
+        if (!isDrawing) return;
+        const rect = gCanvas.getBoundingClientRect();
+        push(ref(db, 'workshop/globalBoard/drawing'), {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        });
+    };
+
+    onValue(ref(db, 'workshop/globalBoard/drawing'), (snap) => {
+        const data = snap.val();
+        if (data) {
+            Object.values(data).forEach(p => {
+                gCtx.fillStyle = "#000";
+                gCtx.fillRect(p.x, p.y, 3, 3);
+            });
+        }
+    });
+
+    window.postGlobalWord = () => {
+        const val = document.getElementById('globalWordInput').value;
+        if(!val) return;
+        push(ref(db, 'workshop/globalBoard/words'), { text: val, x: 50, y: 50 });
+        document.getElementById('globalWordInput').value = "";
+    };
+
+    window.clearGlobalCanvas = () => {
+        remove(ref(db, 'workshop/globalBoard/drawing'));
+        gCtx.clearRect(0, 0, 1000, 800);
+    };
+
+    // --- 3. SCHERM 3: KOPPELTJES & DRAGGABLES ---
+    const pairBoard = document.getElementById('pair-board');
+
+    window.addNewDraggable = () => {
+        const txt = document.getElementById('dragInput').value;
+        if(!txt) return;
+        push(ref(db, `workshop/pairs/${myPairId}/elements`), {
+            text: txt, extra: "", x: 100, y: 100
+        });
+        document.getElementById('dragInput').value = "";
+    };
+
+    onValue(ref(db, `workshop/pairs/${myPairId}/elements`), (snap) => {
+        const elements = snap.val();
+        pairBoard.innerHTML = "";
+        if (elements) {
+            Object.entries(elements).forEach(([key, el]) => {
+                const div = document.createElement('div');
+                div.className = "draggable";
+                div.style.left = el.x + "px";
+                div.style.top = el.y + "px";
+                div.innerHTML = `<strong>${el.text}</strong><textarea placeholder="Extra info...">${el.extra}</textarea>`;
+                
+                // Live tekst-update
+                div.querySelector('textarea').oninput = (e) => {
+                    update(ref(db, `workshop/pairs/${myPairId}/elements/${key}`), { extra: e.target.value });
+                };
+
+                // Dragging
+                div.onmousedown = (e) => {
+                    if(e.target.tagName === 'TEXTAREA') return; // Voorkom drag bij typen
+                    let shiftX = e.clientX - div.getBoundingClientRect().left;
+                    let shiftY = e.clientY - div.getBoundingClientRect().top;
+
+                    document.onmousemove = (moveEv) => {
+                        let x = moveEv.clientX - shiftX - pairBoard.getBoundingClientRect().left;
+                        let y = moveEv.clientY - shiftY - pairBoard.getBoundingClientRect().top;
+                        div.style.left = x + "px";
+                        div.style.top = y + "px";
+                    };
+
+                    document.onmouseup = () => {
+                        document.onmousemove = null;
+                        update(ref(db, `workshop/pairs/${myPairId}/elements/${key}`), {
+                            x: parseInt(div.style.left),
+                            y: parseInt(div.style.top)
+                        });
+                    };
+                };
+                pairBoard.appendChild(div);
+            });
+        }
+    });
+
+    window.submitToLeader = () => {
+        set(ref(db, `workshop/submissions/${myPairId}`), {
+            pairId: myPairId,
+            timestamp: Date.now(),
+            status: "verstuurd"
+        });
+        alert("Je bord is ingestuurd naar de leider!");
+    };
+
+</script>
+
+</body>
+</html>
