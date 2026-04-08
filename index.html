@@ -9,36 +9,31 @@
             --primary: #9b59b6; --secondary: #3498db; --accent: #f1c40f; 
             --dark: #2c3e50; --light: #ecf0f1; --success: #27ae60; --danger: #e74c3c;
         }
-
-        body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; background: #f8f9fa; color: var(--dark); }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f8f9fa; color: var(--dark); }
         
-        /* Navigatie */
         #admin-bar { background: var(--dark); padding: 12px; display: flex; justify-content: center; gap: 8px; position: sticky; top: 0; z-index: 1000; flex-wrap: wrap; }
         button { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .btn-nav { background: var(--light); color: var(--dark); font-size: 0.8em; }
         .btn-admin { background: var(--danger); color: white; }
         .btn-reset { background: #000; color: #e74c3c; border: 1px solid #e74c3c; }
-        .btn-mail { background: var(--success); color: white; padding: 12px 25px; }
+        .btn-mail { background: var(--success); color: white; padding: 15px 30px; font-size: 1.1em; }
 
-        /* Content */
         .screen { display: none; max-width: 1100px; margin: 20px auto; padding: 20px; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .theory-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border-left: 8px solid var(--primary); margin-bottom: 20px; }
         
-        /* Input velden voor opdrachten */
         .assignment-box { background: #fff; padding: 20px; border-radius: 10px; border: 1px solid #ddd; margin-top: 15px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--secondary); }
-        textarea.prompt-input { width: 100%; height: 100px; padding: 12px; border: 1px solid #ccc; border-radius: 6px; resize: vertical; font-family: monospace; box-sizing: border-box; margin-bottom: 15px; }
+        textarea.prompt-input { width: 100%; height: 120px; padding: 12px; border: 1px solid #ccc; border-radius: 6px; resize: vertical; box-sizing: border-box; font-family: monospace; }
         input.link-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
 
-        /* Bord Elementen */
-        .board-container { position: relative; width: 100%; height: 600px; border: 2px solid var(--dark); background: white; margin-top: 20px; overflow: hidden; }
-        .draggable { position: absolute; width: 220px; padding: 12px; background: #fffde7; border: 1px solid #f1c40f; border-radius: 8px; cursor: move; z-index: 10; font-size: 0.9em; }
-        .draggable textarea { width: 100%; height: 50px; margin-top: 8px; font-size: 11px; }
+        .board-container { position: relative; width: 100%; height: 650px; border: 2px solid var(--dark); background: white; margin-top: 20px; overflow: hidden; }
+        .draggable { position: absolute; width: 220px; padding: 12px; background: #fffde7; border: 1px solid #f1c40f; border-radius: 8px; cursor: move; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .draggable textarea { width: 100%; height: 60px; margin-top: 8px; font-size: 11px; resize: none; border: 1px solid #eee; }
 
         .flex-row { display: flex; gap: 20px; }
-        #theory-source { width: 250px; background: #eee; padding: 15px; border-radius: 8px; height: 600px; overflow-y: auto; }
-        .source-item { background: white; padding: 10px; margin-bottom: 8px; border-radius: 4px; cursor: pointer; border: 1px solid #ccc; font-size: 0.8em; }
+        #theory-source { width: 300px; background: #eef2f5; padding: 20px; border-radius: 8px; height: 650px; overflow-y: auto; border: 1px solid #ddd; }
+        .source-item { background: white; padding: 12px; margin-bottom: 10px; border-radius: 6px; cursor: pointer; border: 1px solid #ccc; font-size: 0.9em; transition: 0.2s; }
+        .source-item:hover { background: var(--accent); transform: scale(1.02); }
     </style>
 </head>
 <body>
@@ -49,60 +44,61 @@
     <button class="btn-nav" onclick="setS(3)">3. Cognitivisme</button>
     <button class="btn-nav" onclick="setS(4)">4. Constructivisme</button>
     <button class="btn-nav" onclick="setS(5)">5. De Analyse</button>
-    <button class="btn-nav" onclick="setS(6)">6. GitHub & Prompts</button>
+    <button class="btn-nav" onclick="setS(6)">6. GitHub</button>
+    <button class="btn-nav" onclick="setS(7)" style="border: 2px solid var(--primary);">7. Extra</button>
     <button class="btn-admin" onclick="generatePairs()">KOPPELEN</button>
     <button class="btn-reset" onclick="resetWorkshop()">RESET</button>
 </div>
 
 <div id="screen-1" class="screen">
     <div class="theory-card" style="text-align: center; border-left-color: var(--accent);">
-        <h1>Onderwijsverrijking Bouwplaats</h1>
+        <h1>Start de Verrijking</h1>
         <div id="login-area">
-            <p>Vul je <strong>voornaam</strong> in om te starten:</p>
-            <input type="text" id="nameInput" placeholder="Voornaam..." style="padding: 12px; width: 250px;">
-            <button class="btn-action" onclick="registerUser()">AANMELDEN</button>
+            <p>Voer je <strong>voornaam</strong> in:</p>
+            <input type="text" id="nameInput" style="padding:12px; width:250px;">
+            <button class="btn-nav" style="background:var(--primary); color:white;" onclick="registerUser()">AANMELDEN</button>
         </div>
-        <p id="wait-msg" style="display:none; color: var(--primary);">Je bent aangemeld. Wacht op de leider...</p>
+        <p id="wait-msg" style="display:none; color:var(--primary); font-weight:bold;">Wachten op de leider voor koppeling...</p>
     </div>
 </div>
 
 <div id="screen-2" class="screen">
     <div class="theory-card" style="border-left-color: var(--accent);">
-        <h2 class="team-label">Opdracht 1: Behaviorisme</h2>
-        <p>Ontwerp een korte leerstap met directe feedback.</p>
+        <h2 class="team-label">Behaviorisme</h2>
+        <p>Leren door directe feedback en kleine stapjes. Focus op meetbaar resultaat.</p>
         <div class="assignment-box">
-            <label>Jullie Prompt:</label>
-            <textarea class="prompt-input" onchange="saveAssignment('s2_prompt', this.value)" id="s2_prompt" placeholder="Kopieer hier de prompt die je hebt gebruikt..."></textarea>
+            <label><strong>Jullie Prompt:</strong></label>
+            <textarea class="prompt-input" id="s2_prompt" onchange="saveAssignment('s2_prompt', this.value)"></textarea>
         </div>
     </div>
 </div>
 
 <div id="screen-3" class="screen">
     <div class="theory-card" style="border-left-color: var(--secondary);">
-        <h2 class="team-label">Opdracht 2: Cognitivisme</h2>
-        <p>Hoe activeer je voorkennis met een digitaal instrument?</p>
+        <h2 class="team-label">Cognitivisme</h2>
+        <p>Leren als informatieverwerking. Mentale schema's bouwen en voorkennis activeren.</p>
         <div class="assignment-box">
-            <label>Jullie Prompt / Uitwerking:</label>
-            <textarea class="prompt-input" onchange="saveAssignment('s3_prompt', this.value)" id="s3_prompt" placeholder="Beschrijf jullie aanpak of prompt..."></textarea>
+            <label><strong>Jullie Uitwerking:</strong></label>
+            <textarea class="prompt-input" id="s3_prompt" onchange="saveAssignment('s3_prompt', this.value)"></textarea>
         </div>
     </div>
 </div>
 
 <div id="screen-4" class="screen">
     <div class="theory-card">
-        <h2 class="team-label">Opdracht 3: Constructivisme</h2>
-        <p>Ontwerp een scaffolding-tool voor sociaal leren.</p>
+        <h2 class="team-label">Constructivisme</h2>
+        <p>Leren is een sociaal proces. Zelf betekenis geven aan de wereld (scaffolding).</p>
         <div class="assignment-box">
-            <label>Jullie Prompt:</label>
-            <textarea class="prompt-input" onchange="saveAssignment('s4_prompt', this.value)" id="s4_prompt" placeholder="Deel hier jullie constructivistische prompt..."></textarea>
+            <label><strong>Jullie Prompt:</strong></label>
+            <textarea class="prompt-input" id="s4_prompt" onchange="saveAssignment('s4_prompt', this.value)"></textarea>
         </div>
     </div>
 </div>
 
 <div id="screen-5" class="screen">
     <div class="theory-card" style="border-left-color: var(--success);">
-        <h2 class="team-label">De Analyse</h2>
-        <p>Sleep elementen naar het bord en onderbouw jullie keuzes.</p>
+        <h2 class="team-label">Mijn Onderwijspraktijk</h2>
+        <p>Sleep elementen naar het bord en leg uit "Omdat..."</p>
     </div>
     <div class="flex-row">
         <div id="theory-source"></div>
@@ -112,17 +108,23 @@
 
 <div id="screen-6" class="screen">
     <div class="theory-card" style="border-left-color: #000;">
-        <h2 class="team-label">GitHub & Finale</h2>
-        <p>Kopieer de codes, plak ze in GitHub en deel hier de linkjes van jullie resultaten.</p>
+        <h2 class="team-label">GitHub Links</h2>
+        <p>Deel hier de linkjes naar jullie gemaakte codes of repositories.</p>
         <div class="assignment-box">
-            <label>GitHub Link 1 (Bijv. Prototype):</label>
-            <input type="text" class="link-input" onchange="saveAssignment('github_1', this.value)" id="github_1" placeholder="https://github.com/...">
-            <br><br>
-            <label>GitHub Link 2 (Bijv. Documentatie):</label>
-            <input type="text" class="link-input" onchange="saveAssignment('github_2', this.value)" id="github_2" placeholder="https://github.com/...">
+            <input type="text" id="github_1" onchange="saveAssignment('github_1', this.value)" class="link-input" placeholder="Link 1..."><br><br>
+            <input type="text" id="github_2" onchange="saveAssignment('github_2', this.value)" class="link-input" placeholder="Link 2...">
         </div>
-        <div style="text-align: center; margin-top: 30px;">
-            <button class="btn-mail" onclick="sendFullPortfolio()">📧 VERSTUUR VOLLEDIG PORTFOLIO NAAR E-MAIL</button>
+    </div>
+</div>
+
+<div id="screen-7" class="screen">
+    <div class="theory-card" style="border-left-color: var(--primary);">
+        <h2 class="team-label">Extra Opdracht</h2>
+        <div class="assignment-box">
+            <textarea class="prompt-input" id="s7_extra" onchange="saveAssignment('s7_extra', this.value)" placeholder="Vrije ruimte voor extra prompts of reflectie..."></textarea>
+        </div>
+        <div style="text-align:center; margin-top:30px;">
+            <button class="btn-mail" onclick="sendFullPortfolio()">📧 VERSTUUR VOLLEDIG PORTFOLIO</button>
         </div>
     </div>
 </div>
@@ -146,71 +148,48 @@
     let myPairId = "";
     let fullData = {};
 
-    // --- REGISTRATIE & KOPPELING ---
     window.registerUser = () => {
         const val = document.getElementById('nameInput').value.trim();
-        if(val) {
-            myName = val; localStorage.setItem('userName', val);
-            set(ref(db, `workshop/waiting_room/${val}`), { joined: Date.now() });
-            document.getElementById('login-area').style.display = "none";
-            document.getElementById('wait-msg').style.display = "block";
-        }
+        if(val) { myName = val; localStorage.setItem('userName', val); set(ref(db, `workshop/waiting_room/${val}`), { joined: Date.now() }); document.getElementById('login-area').style.display="none"; document.getElementById('wait-msg').style.display="block"; }
     };
 
     window.generatePairs = () => {
         onValue(ref(db, 'workshop/waiting_room'), (snap) => {
-            const users = Object.keys(snap.val() || {});
-            if(users.length < 2) return alert("Te weinig mensen!");
+            const users = Object.keys(snap.val() || {}); if(users.length < 2) return;
             const shuffled = users.sort(() => 0.5 - Math.random());
             const assignments = {};
             for(let i=0; i<shuffled.length; i+=2) {
                 const pName = shuffled[i+1] ? `${shuffled[i]}_&_${shuffled[i+1]}` : assignments[shuffled[i-1]];
-                assignments[shuffled[i]] = pName;
-                if(shuffled[i+1]) assignments[shuffled[i+1]] = pName;
+                assignments[shuffled[i]] = pName; if(shuffled[i+1]) assignments[shuffled[i+1]] = pName;
             }
-            set(ref(db, 'workshop/assignments'), assignments);
-            remove(ref(db, 'workshop/waiting_room'));
-            setS(2);
+            set(ref(db, 'workshop/assignments'), assignments); remove(ref(db, 'workshop/waiting_room')); setS(2);
         }, { onlyOnce: true });
     };
 
-    // --- DATA SYNC ---
-    window.saveAssignment = (field, value) => {
-        if(myPairId) update(ref(db, `workshop/pairs/${myPairId}/assignments`), { [field]: value });
-    };
+    window.saveAssignment = (field, value) => { if(myPairId) update(ref(db, `workshop/pairs/${myPairId}/assignments`), { [field]: value }); };
 
     function syncKoppelData() {
         onValue(ref(db, `workshop/pairs/${myPairId}`), (snap) => {
             fullData = snap.val() || {};
             const ass = fullData.assignments || {};
-            // Vul velden in als ze door de partner zijn aangepast
-            ['s2_prompt', 's3_prompt', 's4_prompt', 'github_1', 'github_2'].forEach(id => {
-                if(document.getElementById(id)) document.getElementById(id).value = ass[id] || "";
+            ['s2_prompt', 's3_prompt', 's4_prompt', 'github_1', 'github_2', 's7_extra'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el && el !== document.activeElement) el.value = ass[id] || "";
             });
-            // Teken bord op Scherm 5
             renderBoard(fullData.s5 || {}, 'analysis-board', `workshop/pairs/${myPairId}/s5`);
         });
     }
 
-    // --- E-MAIL EXPORT ---
     window.sendFullPortfolio = () => {
         const ass = fullData.assignments || {};
         let body = `PORTFOLIO ONDERWIJSVERRIJKING\nTeam: ${myPairId}\n\n`;
-        
-        body += `--- OPDRACHT 1: BEHAVIORISME ---\nPrompt: ${ass.s2_prompt || "Nog geen"}\n\n`;
-        body += `--- OPDRACHT 2: COGNITIVISME ---\nPrompt: ${ass.s3_prompt || "Nog geen"}\n\n`;
-        body += `--- OPDRACHT 3: CONSTRUCTIVISME ---\nPrompt: ${ass.s4_prompt || "Nog geen"}\n\n`;
-        body += `--- GITHUB LINKS ---\nLink 1: ${ass.github_1 || "-"}\nLink 2: ${ass.github_2 || "-"}\n\n`;
-        
-        body += `--- ANALYSE OOGST ---\n`;
-        if(fullData.s5) Object.values(fullData.s5).forEach(item => {
-            body += `- ${item.t}: ${item.omdat || "(geen uitleg)"}\n`;
-        });
-
+        body += `1. Behaviorisme: ${ass.s2_prompt || "-"}\n\n2. Cognitivisme: ${ass.s3_prompt || "-"}\n\n3. Constructivisme: ${ass.s4_prompt || "-"}\n\n`;
+        body += `GitHub: ${ass.github_1 || "-"} / ${ass.github_2 || "-"}\n\nExtra: ${ass.s7_extra || "-"}\n\n`;
+        body += `Analyse Bord:\n`;
+        if(fullData.s5) Object.values(fullData.s5).forEach(item => { body += `- ${item.t}: ${item.omdat || ""}\n`; });
         window.location.href = `mailto:?subject=Portfolio ${myPairId}&body=${encodeURIComponent(body)}`;
     };
 
-    // --- BASIS FUNCTIES (Navigatie, Reset, Bord) ---
     window.setS = (n) => set(ref(db, 'workshop/config/screen'), n);
     onValue(ref(db, 'workshop/config/screen'), (s) => {
         const n = s.val() || 1;
@@ -219,15 +198,10 @@
     });
 
     onValue(ref(db, 'workshop/assignments'), (snap) => {
-        const data = snap.val();
-        if(data && myName && data[myName]) {
-            myPairId = data[myName];
-            document.querySelectorAll('.team-label').forEach(l => l.innerText += ` (Team: ${myPairId.replace(/_/g, ' ')})`);
-            syncKoppelData();
-        }
+        const data = snap.val(); if(data && myName && data[myName]) { myPairId = data[myName]; syncKoppelData(); }
     });
 
-    window.resetWorkshop = () => { if(confirm("ALLES WISSEN?")) set(ref(db, 'workshop'), { config: { screen: 1 } }); };
+    window.resetWorkshop = () => { if(confirm("RESET?")) set(ref(db, 'workshop'), { config: { screen: 1 } }); };
 
     function renderBoard(data, boardId, path) {
         const board = document.getElementById(boardId); if(!board) return;
@@ -235,7 +209,7 @@
         Object.entries(data).forEach(([key, el]) => {
             const div = document.createElement('div');
             div.className = "draggable"; div.style.left = el.x+"px"; div.style.top = el.y+"px";
-            div.innerHTML = `<strong>${el.t}</strong><textarea placeholder="Omdat...">${el.omdat || ""}</textarea>`;
+            div.innerHTML = `<strong>${el.t}</strong><textarea>${el.omdat || ""}</textarea>`;
             div.querySelector('textarea').onchange = (e) => update(ref(db, `${path}/${key}`), { omdat: e.target.value });
             div.onmousedown = (e) => {
                 if(e.target.tagName==='TEXTAREA') return;
@@ -250,8 +224,9 @@
     }
 
     function fillSource() {
-        const container = document.getElementById('theory-source'); container.innerHTML = "<h4>Oogst:</h4>";
-        ["Directe Feedback", "Scaffolding", "Sociaal Leren", "Eigenaarschap", "Mentale Schema's"].forEach(t => {
+        const container = document.getElementById('theory-source');
+        container.innerHTML = "<h4>Theorie Oogst:</h4>";
+        ["Directe Feedback", "Scaffolding", "Sociaal Leren", "Eigenaarschap", "Mentale Schema's", "Chunking", "Voorkennis", "Beloning"].forEach(t => {
             const d = document.createElement('div'); d.className = "source-item"; d.innerText = t;
             d.onclick = () => { if(myPairId) push(ref(db, `workshop/pairs/${myPairId}/s5`), { t, x:50, y:50, omdat:"" }); };
             container.appendChild(d);
