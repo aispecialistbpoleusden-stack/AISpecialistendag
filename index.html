@@ -3,125 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Onderwijsverrijking & Leertheorie</title>
+    <title>Onderwijsverrijking Portfolio</title>
     <style>
         :root {
             --primary: #9b59b6; --secondary: #3498db; --accent: #f1c40f; 
             --dark: #2c3e50; --light: #ecf0f1; --success: #27ae60; --danger: #e74c3c;
         }
 
-        body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; background: #f8f9fa; color: var(--dark); overflow-x: hidden; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; background: #f8f9fa; color: var(--dark); }
         
-        /* Abstracte Achtergrond */
-        .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.15; overflow: hidden; }
-        .blob { position: absolute; background: var(--secondary); filter: blur(80px); border-radius: 50%; animation: float 25s infinite alternate; }
-        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(120px, 120px) scale(1.4); } }
-
         /* Navigatie */
-        #admin-bar { background: var(--dark); padding: 12px; display: flex; justify-content: center; gap: 10px; position: sticky; top: 0; z-index: 1000; }
-        button { padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-nav { background: var(--light); color: var(--dark); font-size: 0.85em; }
+        #admin-bar { background: var(--dark); padding: 12px; display: flex; justify-content: center; gap: 8px; position: sticky; top: 0; z-index: 1000; flex-wrap: wrap; }
+        button { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-nav { background: var(--light); color: var(--dark); font-size: 0.8em; }
         .btn-admin { background: var(--danger); color: white; }
-        .btn-action { background: var(--primary); color: white; margin-top: 15px; }
+        .btn-reset { background: #000; color: #e74c3c; border: 1px solid #e74c3c; }
+        .btn-mail { background: var(--success); color: white; padding: 12px 25px; }
 
-        /* Schermen */
-        .screen { display: none; max-width: 1150px; margin: 30px auto; padding: 20px; animation: fadeIn 0.4s; }
+        /* Content */
+        .screen { display: none; max-width: 1100px; margin: 20px auto; padding: 20px; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .theory-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-left: 10px solid var(--primary); margin-bottom: 25px; }
+        .theory-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border-left: 8px solid var(--primary); margin-bottom: 20px; }
         
-        /* Borden */
-        .board-container { position: relative; width: 1000px; height: 750px; border: 3px solid var(--dark); background: white; margin: 20px auto; overflow: hidden; }
-        .draggable { position: absolute; width: 230px; padding: 15px; background: #fffde7; border: 1px solid #fff59d; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); cursor: move; z-index: 10; }
-        .draggable textarea { width: 100%; height: 65px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; resize: none; font-size: 12px; font-family: inherit; padding: 5px; box-sizing: border-box; }
+        /* Input velden voor opdrachten */
+        .assignment-box { background: #fff; padding: 20px; border-radius: 10px; border: 1px solid #ddd; margin-top: 15px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--secondary); }
+        textarea.prompt-input { width: 100%; height: 100px; padding: 12px; border: 1px solid #ccc; border-radius: 6px; resize: vertical; font-family: monospace; box-sizing: border-box; margin-bottom: 15px; }
+        input.link-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
 
-        #theory-source { width: 320px; background: #eef2f5; padding: 20px; border-radius: 12px; height: 750px; overflow-y: auto; border: 1px solid #ddd; }
-        .source-item { background: white; padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; border: 1px solid #ccc; font-size: 0.9em; transition: 0.2s; }
-        .source-item:hover { background: var(--accent); transform: translateX(8px); }
+        /* Bord Elementen */
+        .board-container { position: relative; width: 100%; height: 600px; border: 2px solid var(--dark); background: white; margin-top: 20px; overflow: hidden; }
+        .draggable { position: absolute; width: 220px; padding: 12px; background: #fffde7; border: 1px solid #f1c40f; border-radius: 8px; cursor: move; z-index: 10; font-size: 0.9em; }
+        .draggable textarea { width: 100%; height: 50px; margin-top: 8px; font-size: 11px; }
 
-        /* Abstracte Visuals */
-        .black-box { width: 90px; height: 90px; background: black; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75em; margin: 0 auto; text-align: center; }
-        .ent-visual { width: 70px; height: 90px; border: 2px solid #eee; position: relative; margin: 0 auto; background: #fff; }
-        .stem { position: absolute; bottom: 0; left: 42%; width: 16%; height: 65%; background: var(--primary); }
-        .ent { position: absolute; top: 15%; left: 50%; width: 35%; height: 35%; background: var(--secondary); border-radius: 0 60% 0 60%; transform: rotate(-15deg); }
+        .flex-row { display: flex; gap: 20px; }
+        #theory-source { width: 250px; background: #eee; padding: 15px; border-radius: 8px; height: 600px; overflow-y: auto; }
+        .source-item { background: white; padding: 10px; margin-bottom: 8px; border-radius: 4px; cursor: pointer; border: 1px solid #ccc; font-size: 0.8em; }
     </style>
 </head>
 <body>
 
-<div class="bg-layer"><div class="blob" style="width: 500px; height: 500px; top: -100px; left: -100px;"></div></div>
-
 <div id="admin-bar">
-    <button class="btn-nav" onclick="setS(1)">1. Intro</button>
+    <button class="btn-nav" onclick="setS(1)">1. Start</button>
     <button class="btn-nav" onclick="setS(2)">2. Behaviorisme</button>
     <button class="btn-nav" onclick="setS(3)">3. Cognitivisme</button>
     <button class="btn-nav" onclick="setS(4)">4. Constructivisme</button>
     <button class="btn-nav" onclick="setS(5)">5. De Analyse</button>
-    <button class="btn-admin" onclick="generatePairs()">MAAK KOPPELS</button>
+    <button class="btn-nav" onclick="setS(6)">6. GitHub & Prompts</button>
+    <button class="btn-admin" onclick="generatePairs()">KOPPELEN</button>
+    <button class="btn-reset" onclick="resetWorkshop()">RESET</button>
 </div>
 
 <div id="screen-1" class="screen">
-    <div class="theory-card" style="border-left-color: var(--accent); text-align: center;">
-        <h1 style="color: var(--dark); font-size: 2.3em; margin-bottom: 15px;">Bouw mee aan Onderwijsverrijking!</h1>
-        <p style="font-size: 1.15em; line-height: 1.7; color: #444; max-width: 850px; margin: 0 auto 25px auto;">
-            Vandaag ben jij de architect. We duiken in de wereld van de leertheorieën — niet vanuit de boeken, maar direct op de werkvloer.
-        </p>
+    <div class="theory-card" style="text-align: center; border-left-color: var(--accent);">
+        <h1>Onderwijsverrijking Bouwplaats</h1>
         <div id="login-area">
-            <p>Voer je <strong>voornaam</strong> in om je aan te melden:</p>
-            <input type="text" id="nameInput" placeholder="Je voornaam..." style="padding: 15px; width: 300px; border-radius: 8px; border: 2px solid var(--accent); font-size: 1em;">
-            <br>
-            <button class="btn-action" onclick="registerUser()">MELD AAN</button>
+            <p>Vul je <strong>voornaam</strong> in om te starten:</p>
+            <input type="text" id="nameInput" placeholder="Voornaam..." style="padding: 12px; width: 250px;">
+            <button class="btn-action" onclick="registerUser()">AANMELDEN</button>
         </div>
-        <div id="wait-msg" style="margin-top:20px; font-style: italic; color: var(--primary); display:none; font-weight: bold;">
-            Je staat in de wachtkamer. De leider maakt zo de koppels...
-        </div>
+        <p id="wait-msg" style="display:none; color: var(--primary);">Je bent aangemeld. Wacht op de leider...</p>
     </div>
 </div>
 
 <div id="screen-2" class="screen">
     <div class="theory-card" style="border-left-color: var(--accent);">
-        <h2 class="team-label">Behaviorisme: De Zwarte Doos</h2>
-        <div style="display: flex; gap: 30px; align-items: center;">
-            <div style="flex: 1;">
-                <p>Focus op stimulus, respons en meetbare output. Leergedrag wordt versterkt door beloning en directe feedback.</p>
-                <p><strong style="color: var(--success);">Plus:</strong> Direct resultaat, succeservaring, heldere structuur.</p>
-            </div>
-            <div class="black-box">STIMULUS ➔ [ ? ] ➔ RESPONS</div>
+        <h2 class="team-label">Opdracht 1: Behaviorisme</h2>
+        <p>Ontwerp een korte leerstap met directe feedback.</p>
+        <div class="assignment-box">
+            <label>Jullie Prompt:</label>
+            <textarea class="prompt-input" onchange="saveAssignment('s2_prompt', this.value)" id="s2_prompt" placeholder="Kopieer hier de prompt die je hebt gebruikt..."></textarea>
         </div>
     </div>
-    <div class="board-container"><canvas id="gCanvas" width="1000" height="750"></canvas></div>
 </div>
 
 <div id="screen-3" class="screen">
     <div class="theory-card" style="border-left-color: var(--secondary);">
-        <h2 class="team-label">Cognitivisme: De Computer</h2>
-        <p>Leren als informatieverwerking en het opbouwen van mentale schema's in het brein.</p>
+        <h2 class="team-label">Opdracht 2: Cognitivisme</h2>
+        <p>Hoe activeer je voorkennis met een digitaal instrument?</p>
+        <div class="assignment-box">
+            <label>Jullie Prompt / Uitwerking:</label>
+            <textarea class="prompt-input" onchange="saveAssignment('s3_prompt', this.value)" id="s3_prompt" placeholder="Beschrijf jullie aanpak of prompt..."></textarea>
+        </div>
     </div>
-    <div id="pBoard" class="board-container" style="background: #f0f4f8;"></div>
 </div>
 
 <div id="screen-4" class="screen">
     <div class="theory-card">
-        <h2 class="team-label">Constructivisme: De Bouwplaats</h2>
-        <p>Leren is een actief, sociaal proces van betekenisgeving. Kennis groeit door interactie.</p>
-        <div style="display: flex; gap: 30px; align-items: center;">
-            <div style="flex: 2; background: #fdfaff; padding: 20px; border-radius: 12px; border: 2px solid var(--primary);">
-                <strong>Verrijking:</strong> Met de juiste instrumenten bied je <em>scaffolding</em> die aansluit bij de Zone van Naaste Ontwikkeling.
-            </div>
-            <div style="flex: 1; text-align: center;">
-                <div class="ent-visual"><div class="stem"></div><div class="ent"></div></div>
-            </div>
+        <h2 class="team-label">Opdracht 3: Constructivisme</h2>
+        <p>Ontwerp een scaffolding-tool voor sociaal leren.</p>
+        <div class="assignment-box">
+            <label>Jullie Prompt:</label>
+            <textarea class="prompt-input" onchange="saveAssignment('s4_prompt', this.value)" id="s4_prompt" placeholder="Deel hier jullie constructivistische prompt..."></textarea>
         </div>
     </div>
-    <div style="text-align:center;"><button class="btn-action" onclick="setS(5)">GA NAAR DE ANALYSE</button></div>
 </div>
 
 <div id="screen-5" class="screen">
     <div class="theory-card" style="border-left-color: var(--success);">
-        <h2 id="final-team-label">Mijn Onderwijspraktijk</h2>
-        <p>Sleep de elementen naar het bord en onderbouw met 'Omdat...'.</p>
+        <h2 class="team-label">De Analyse</h2>
+        <p>Sleep elementen naar het bord en onderbouw jullie keuzes.</p>
     </div>
-    <div style="display:flex; gap:25px;">
+    <div class="flex-row">
         <div id="theory-source"></div>
-        <div id="analysis-board" class="board-container" style="flex-grow:1; border: 4px dashed var(--primary);"></div>
+        <div id="analysis-board" class="board-container"></div>
+    </div>
+</div>
+
+<div id="screen-6" class="screen">
+    <div class="theory-card" style="border-left-color: #000;">
+        <h2 class="team-label">GitHub & Finale</h2>
+        <p>Kopieer de codes, plak ze in GitHub en deel hier de linkjes van jullie resultaten.</p>
+        <div class="assignment-box">
+            <label>GitHub Link 1 (Bijv. Prototype):</label>
+            <input type="text" class="link-input" onchange="saveAssignment('github_1', this.value)" id="github_1" placeholder="https://github.com/...">
+            <br><br>
+            <label>GitHub Link 2 (Bijv. Documentatie):</label>
+            <input type="text" class="link-input" onchange="saveAssignment('github_2', this.value)" id="github_2" placeholder="https://github.com/...">
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn-mail" onclick="sendFullPortfolio()">📧 VERSTUUR VOLLEDIG PORTFOLIO NAAR E-MAIL</button>
+        </div>
     </div>
 </div>
 
@@ -142,46 +144,29 @@
 
     let myName = localStorage.getItem('userName') || "";
     let myPairId = "";
+    let fullData = {};
 
-    // 1. Voornaam Registratie
+    // --- REGISTRATIE & KOPPELING ---
     window.registerUser = () => {
         const val = document.getElementById('nameInput').value.trim();
         if(val) {
-            myName = val;
-            localStorage.setItem('userName', val);
-            set(ref(db, `workshop/waiting_room/${val}`), { timestamp: Date.now() });
+            myName = val; localStorage.setItem('userName', val);
+            set(ref(db, `workshop/waiting_room/${val}`), { joined: Date.now() });
             document.getElementById('login-area').style.display = "none";
             document.getElementById('wait-msg').style.display = "block";
         }
     };
 
-    // 2. Luister naar Koppel-opdrachten
-    onValue(ref(db, 'workshop/assignments'), (snap) => {
-        const data = snap.val();
-        if(data && myName && data[myName]) {
-            myPairId = data[myName];
-            const labels = document.querySelectorAll('.team-label, #final-team-label');
-            labels.forEach(l => l.innerText = `Team: ${myPairId.replace(/_/g, ' ')}`);
-            syncKoppelBord();
-        }
-    });
-
-    // 3. Leider: Genereer Koppels
     window.generatePairs = () => {
         onValue(ref(db, 'workshop/waiting_room'), (snap) => {
             const users = Object.keys(snap.val() || {});
-            if(users.length < 2) return alert("Nog niet genoeg voornamen in de wachtkamer!");
-            
+            if(users.length < 2) return alert("Te weinig mensen!");
             const shuffled = users.sort(() => 0.5 - Math.random());
             const assignments = {};
-            for(let i = 0; i < shuffled.length; i += 2) {
-                if(shuffled[i+1]) {
-                    const pName = `${shuffled[i]}_&_${shuffled[i+1]}`;
-                    assignments[shuffled[i]] = pName;
-                    assignments[shuffled[i+1]] = pName;
-                } else {
-                    assignments[shuffled[i]] = assignments[shuffled[i-1]]; // Groepje van 3
-                }
+            for(let i=0; i<shuffled.length; i+=2) {
+                const pName = shuffled[i+1] ? `${shuffled[i]}_&_${shuffled[i+1]}` : assignments[shuffled[i-1]];
+                assignments[shuffled[i]] = pName;
+                if(shuffled[i+1]) assignments[shuffled[i+1]] = pName;
             }
             set(ref(db, 'workshop/assignments'), assignments);
             remove(ref(db, 'workshop/waiting_room'));
@@ -189,7 +174,43 @@
         }, { onlyOnce: true });
     };
 
-    // Navigatie & Bord Logica
+    // --- DATA SYNC ---
+    window.saveAssignment = (field, value) => {
+        if(myPairId) update(ref(db, `workshop/pairs/${myPairId}/assignments`), { [field]: value });
+    };
+
+    function syncKoppelData() {
+        onValue(ref(db, `workshop/pairs/${myPairId}`), (snap) => {
+            fullData = snap.val() || {};
+            const ass = fullData.assignments || {};
+            // Vul velden in als ze door de partner zijn aangepast
+            ['s2_prompt', 's3_prompt', 's4_prompt', 'github_1', 'github_2'].forEach(id => {
+                if(document.getElementById(id)) document.getElementById(id).value = ass[id] || "";
+            });
+            // Teken bord op Scherm 5
+            renderBoard(fullData.s5 || {}, 'analysis-board', `workshop/pairs/${myPairId}/s5`);
+        });
+    }
+
+    // --- E-MAIL EXPORT ---
+    window.sendFullPortfolio = () => {
+        const ass = fullData.assignments || {};
+        let body = `PORTFOLIO ONDERWIJSVERRIJKING\nTeam: ${myPairId}\n\n`;
+        
+        body += `--- OPDRACHT 1: BEHAVIORISME ---\nPrompt: ${ass.s2_prompt || "Nog geen"}\n\n`;
+        body += `--- OPDRACHT 2: COGNITIVISME ---\nPrompt: ${ass.s3_prompt || "Nog geen"}\n\n`;
+        body += `--- OPDRACHT 3: CONSTRUCTIVISME ---\nPrompt: ${ass.s4_prompt || "Nog geen"}\n\n`;
+        body += `--- GITHUB LINKS ---\nLink 1: ${ass.github_1 || "-"}\nLink 2: ${ass.github_2 || "-"}\n\n`;
+        
+        body += `--- ANALYSE OOGST ---\n`;
+        if(fullData.s5) Object.values(fullData.s5).forEach(item => {
+            body += `- ${item.t}: ${item.omdat || "(geen uitleg)"}\n`;
+        });
+
+        window.location.href = `mailto:?subject=Portfolio ${myPairId}&body=${encodeURIComponent(body)}`;
+    };
+
+    // --- BASIS FUNCTIES (Navigatie, Reset, Bord) ---
     window.setS = (n) => set(ref(db, 'workshop/config/screen'), n);
     onValue(ref(db, 'workshop/config/screen'), (s) => {
         const n = s.val() || 1;
@@ -197,39 +218,31 @@
         if(n === 5) fillSource();
     });
 
-    const canvas = document.getElementById('gCanvas');
-    const ctx = canvas.getContext('2d');
-    onValue(ref(db, 'workshop/s2/pixels'), (s) => {
-        const d = s.val(); if(d) Object.values(d).forEach(p => { ctx.fillStyle="#000"; ctx.fillRect(p.x, p.y, 3, 3); });
+    onValue(ref(db, 'workshop/assignments'), (snap) => {
+        const data = snap.val();
+        if(data && myName && data[myName]) {
+            myPairId = data[myName];
+            document.querySelectorAll('.team-label').forEach(l => l.innerText += ` (Team: ${myPairId.replace(/_/g, ' ')})`);
+            syncKoppelData();
+        }
     });
 
-    function syncKoppelBord() {
-        if(!myPairId) return;
-        onValue(ref(db, `workshop/pairs/${myPairId}/s5`), (snap) => {
-            renderBoard(snap.val(), 'analysis-board', `workshop/pairs/${myPairId}/s5`);
-        });
-    }
+    window.resetWorkshop = () => { if(confirm("ALLES WISSEN?")) set(ref(db, 'workshop'), { config: { screen: 1 } }); };
 
     function renderBoard(data, boardId, path) {
-        const board = document.getElementById(boardId);
-        if(!board) return;
+        const board = document.getElementById(boardId); if(!board) return;
         board.querySelectorAll('.draggable').forEach(e => e.remove());
-        if(data) Object.entries(data).forEach(([key, el]) => {
+        Object.entries(data).forEach(([key, el]) => {
             const div = document.createElement('div');
-            div.className = "draggable";
-            div.style.left = el.x+"px"; div.style.top = el.y+"px";
+            div.className = "draggable"; div.style.left = el.x+"px"; div.style.top = el.y+"px";
             div.innerHTML = `<strong>${el.t}</strong><textarea placeholder="Omdat...">${el.omdat || ""}</textarea>`;
             div.querySelector('textarea').onchange = (e) => update(ref(db, `${path}/${key}`), { omdat: e.target.value });
             div.onmousedown = (e) => {
-                if(e.target.tagName === 'TEXTAREA') return;
-                let sX = e.clientX - div.getBoundingClientRect().left;
-                let sY = e.clientY - div.getBoundingClientRect().top;
-                document.onmousemove = (m) => {
-                    update(ref(db, `${path}/${key}`), { 
-                        x: m.clientX - sX - board.getBoundingClientRect().left, 
-                        y: m.clientY - sY - board.getBoundingClientRect().top 
-                    });
-                };
+                if(e.target.tagName==='TEXTAREA') return;
+                document.onmousemove = (m) => update(ref(db, `${path}/${key}`), { 
+                    x: m.clientX - div.offsetWidth/2 - board.getBoundingClientRect().left, 
+                    y: m.clientY - div.offsetHeight/2 - board.getBoundingClientRect().top 
+                });
                 document.onmouseup = () => document.onmousemove = null;
             };
             board.appendChild(div);
@@ -237,11 +250,9 @@
     }
 
     function fillSource() {
-        const container = document.getElementById('theory-source');
-        container.innerHTML = "<h3>Oogst:</h3>";
-        ["Directe Feedback", "Meetbare Output", "Kleine Stapjes", "Voorkennis Activeren", "Informatieverwerking", "Mentale Schema's", "Eigenaarschap", "Sociaal Leren", "Scaffolding"].forEach(t => {
-            const d = document.createElement('div');
-            d.className = "source-item"; d.innerText = t;
+        const container = document.getElementById('theory-source'); container.innerHTML = "<h4>Oogst:</h4>";
+        ["Directe Feedback", "Scaffolding", "Sociaal Leren", "Eigenaarschap", "Mentale Schema's"].forEach(t => {
+            const d = document.createElement('div'); d.className = "source-item"; d.innerText = t;
             d.onclick = () => { if(myPairId) push(ref(db, `workshop/pairs/${myPairId}/s5`), { t, x:50, y:50, omdat:"" }); };
             container.appendChild(d);
         });
